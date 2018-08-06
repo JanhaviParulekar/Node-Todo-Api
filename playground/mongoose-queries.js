@@ -22,15 +22,15 @@ const {Users} = require('./../server/models/user');
 //     console.log('Todo: ', todo);
 // });
 
-// Todo.findById(id).then((todoById) =>{
-//     if(!todoById){
-//         return console.log('Id not found');
-//     }
-//     console.log('Todo by id: ', todoById);
-// }).catch((e) => console.log(e));
+Todo.findById(id).then((todoById) =>{
+    if(!todoById){
+        return console.log('Id not found');
+    }
+    console.log('Todo by id: ', todoById);
+}).catch((e) => console.log(e));
 
 
-var userId = '5b64fbbdc3cd05f43ac87386';
+var userId = '5b6882886ce383602882bc0e';
 
 Users.findById(userId).then((user) => {
     if(!user){
