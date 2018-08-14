@@ -1,6 +1,6 @@
 const expect = require('expect');
 const request = require('supertest');
-const chai = require('chai');
+// const chai = require('chai');
 
 const {ObjectID} = require('mongodb');
 
@@ -8,7 +8,7 @@ const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 const {User} = require('./../models/user');
 const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
-chai.should();
+// chai.should();
 
 beforeEach(populateUsers);
 beforeEach(populateTodos);
@@ -191,21 +191,37 @@ describe('Patch/todos/:id', () =>{
         .end(done);
     });
 
-    it.only('should not update the todo created by another user', async () =>{
-        var hexId = todos[1]._id.toHexString();
+    it('should not update the todo created by another user', (done) =>{
+        var hexId = todos[0]._id.toHexString();
         var text = 'This should be the new text';
 
-        await request(app)
+        request(app)
         .patch(`/todos/${hexId}`)
-        .set('x-auth', users[0].tokens[0].token)
+        .set('x-auth', users[1].tokens[0].token)
         .send({
             text,
             completed: true
         })
-        .then((res) => {
-            res.status.should.be.equal(404);  
-        })
+        .expect(404)
+        .end(done);
     });
+
+
+    // it.only('should not update the todo created by another user', async () =>{
+    //     var hexId = todos[1]._id.toHexString();
+    //     var text = 'This should be the new text';
+
+    //     await request(app)
+    //     .patch(`/todos/${hexId}`)
+    //     .set('x-auth', users[0].tokens[0].token)
+    //     .send({
+    //         text,
+    //         completed: true
+    //     })
+    //     .then((res) => {
+    //         res.status.should.be.equal(404);  
+    //     })
+    // });
 
     it('should clear completedAt when test is not complete', (done) =>{
         var hexId = todos[1]._id.toHexString();
